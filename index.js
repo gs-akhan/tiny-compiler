@@ -1,50 +1,12 @@
-function parser(tokens) {
-    var current = 0;
-    debugger;
-    function walk() {
-        var token = tokens[current];
-
-        if (token.type === "number") {
-            current++;
-            return {
-                type: "NumberLiteral",
-                value: token.value
-            }
-        }
+var tokenizer = require("./tokenizer");
+var parser = require("./parser");
 
 
-        if (token.type === "paren" && token.value === "(") {
-            token = tokens[++current];
-            
-            var node = {
-                type: "CallExpression",
-                name: token.value,
-                params: []
+var code = "(add 1 sub 1 3)";
 
-            }
+var tokens = tokenizer(code);
 
-            token = tokens[++current];
+var ast = parser(tokens);
 
-            while (token.type !== "paren" || token.value !== ")") {
-                node.params.push(walk());
-                token  = tokens[current];
-            }
 
-            current++;
-            return node;
-        }
-
-        throw new TypeError("Unexpected Token "+token.type);
-
-    }
-
-    var ast = {
-        type: "Program",
-        body: []
-    };
-    while (current < tokens.length) {
-        ast.body.push(walk());
-    }
-
-    return ast;
-}
+console.log(JSON.stringify(ast));
