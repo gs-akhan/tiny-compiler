@@ -15,9 +15,11 @@ function parser(tokens) {
 
             current++;
             token = tokens[current];
-
+            
+            //You have to traverse down until you see a closing bracket. 
+            // As we get a closing bracket we need to skip it and return node.
             while (
-                token.type !== "paren" || token.value !== ")"
+                token.value !== ")"
             ) {
                 node.params.push(walk());
                 token = tokens[current];
